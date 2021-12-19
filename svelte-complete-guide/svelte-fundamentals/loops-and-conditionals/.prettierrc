@@ -1,0 +1,9 @@
+{
+  "svelteSortOrder": "options-scripts-markup-styles",
+  "tabWidth": 2,
+  "singleQuote": true,
+  "svelteStrictMode": false,
+  "svelteBracketNewLine": false,
+  "svelteAllowShorthand": true,
+  "svelteIndentScriptAndStyle": true
+}

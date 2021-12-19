@@ -9,8 +9,6 @@
 
   let age = 21;
 
-  // let uppercaseName; not required
-
   // NOTE `$:` syntax updates uppercaseName whenever the value of `name` changes
   $: uppercaseName = userName.toUpperCase();
 
@@ -38,7 +36,8 @@
 </script>
 
 <main>
-  <h1>Hello {uppercaseName}, my age is {age}!</h1>
+  <h1>Hello World!</h1>
+  <h2>Name's {uppercaseName}, my age is {age}!</h2>
   <button on:click={() => changeAge(true)}>Increment Age</button>
   <button on:click={toggleName}>Change Name</button>
 
