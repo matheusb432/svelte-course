@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Button } from '../UI';
+
   export let title: string;
   export let subtitle: string;
   export let imageUrl: string;
@@ -21,9 +23,9 @@
     <p>{description}</p>
   </div>
   <footer>
-    <a href="mailto:{contactEmail}">Contact</a>
-    <button>Show Details</button>
-    <button>Favorite</button>
+    <Button href="mailto:{contactEmail}" caption="Contact" />
+    <Button mode="outline" caption="Favorite" />
+    <Button caption="Show Details" />
   </footer>
 </article>
 
@@ -78,5 +80,9 @@
 
   div {
     text-align: right;
+  }
+
+  .content {
+    height: 4rem;
   }
 </style>
