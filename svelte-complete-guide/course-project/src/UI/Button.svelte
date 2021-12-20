@@ -1,8 +1,9 @@
 <script lang="ts">
   export let type: 'button' | 'submit' = 'button';
   export let caption: string;
-  export let href: string = '';
-  export let mode: string = '';
+  export let href: string | null = null;
+  export let mode: string | null = null;
+  export let color: string | null = null;
 
   function typeAction(node: HTMLButtonElement) {
     node.type = type;
@@ -10,9 +11,9 @@
 </script>
 
 {#if href}
-  <a {href}>{caption}</a>
+  <a {href} on:click>{caption}</a>
 {:else}
-  <button class={mode} use:typeAction>{caption}</button>
+  <button class="{mode} {color}" use:typeAction on:click>{caption}</button>
 {/if}
 
 <style>

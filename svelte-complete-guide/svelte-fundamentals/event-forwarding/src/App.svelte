@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick, afterUpdate } from 'svelte';
   import type { ProductModel } from './product-model';
 
   import Product from './Product.svelte';
@@ -7,6 +8,8 @@
   let showModal = false;
 
   let closable = false;
+
+  let text = 'This is some dummy text';
 
   let products: ProductModel[] = [
     {
@@ -34,6 +37,35 @@
   function closeModal(event: Event, open: boolean = false) {
     showModal = open;
   }
+
+  // function transform(event: KeyboardEvent) {
+  function transform(event: any) {
+    if (event.which !== 9) {
+      return;
+    }
+    event.preventDefault();
+
+    const selectionStart = event.target.selectionStart;
+    const selectionEnd = event.target.selectionEnd;
+    const value = event.target.value;
+
+    text =
+      value.slice(0, selectionStart) +
+      value.slice(selectionStart, selectionEnd).toUpperCase() +
+      value.slice(selectionEnd);
+
+    // NOTE tick() will execute as soon as any pending state changes have been applied to the DOM
+    tick().then(() => {
+      event.target.selectionStart = selectionStart;
+      event.target.selectionEnd = selectionEnd;
+    });
+
+    // ! will not work!
+    // event.target.selectionStart = selectionStart;
+    // event.target.selectionEnd = selectionEnd;
+  }
+
+  afterUpdate(() => {});
 </script>
 
 {#each products as product}
@@ -54,3 +86,5 @@
       >Confirm</button>
   </Modal>
 {/if}
+
+<textarea rows="5" value={text} on:keydown={transform} />

@@ -51,6 +51,26 @@
 
     description = element?.value;
   }
+
+  function toggleFavoriteMeetup(ev: CustomEvent): void {
+    const id: string = ev.detail.id;
+
+    const updatedMeetup = { ...meetups.find((m) => m.id === id) } as Meetup;
+
+    updatedMeetup.isFavorite = !updatedMeetup.isFavorite;
+
+    const meetupIndex = meetups.findIndex((m) => m.id === id);
+
+    const updatedMeetups = [...meetups];
+
+    updatedMeetups[meetupIndex] = updatedMeetup;
+
+    meetups = updatedMeetups;
+  }
+
+  function showDetails({ detail }: CustomEvent): void {
+    const meetup = { ...meetups.find((m) => m.id === detail?.id) };
+  }
 </script>
 
 <Header />
@@ -96,7 +116,10 @@
     </form>
   </section>
 
-  <MeetupGrid {meetups} />
+  <MeetupGrid
+    {meetups}
+    on:togglefavorite={toggleFavoriteMeetup}
+    on:showdetails={showDetails} />
 </main>
 
 <style>

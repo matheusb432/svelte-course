@@ -6,6 +6,7 @@ export class Meetup {
     public description: string,
     public imageUrl: string,
     public address: string,
-    public contactEmail: string
+    public contactEmail: string,
+    public isFavorite = false
   ) {}
 }

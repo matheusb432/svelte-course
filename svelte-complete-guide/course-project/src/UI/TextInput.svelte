@@ -1,11 +1,11 @@
 <script lang="ts">
-  export let controlType: 'textarea' | 'input' = 'input';
+  export let controlType: 'textarea' | null = null;
 
   export let value: string | number;
   export let type: 'text' | 'email' | 'password' = 'text';
   export let id: string;
   export let label: string;
-  export let rows: number = 3;
+  export let rows: number | null = null;
 
   function typeAction(node: HTMLInputElement) {
     node.type = type;

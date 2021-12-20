@@ -6,14 +6,18 @@
 </script>
 
 <section id="meetups">
-  {#each meetups as { id, title, subtitle, description, imageUrl, address, contactEmail } (id)}
+  {#each meetups as { id, title, subtitle, description, imageUrl, address, contactEmail, isFavorite } (id)}
     <MeetupItem
+      {id}
       {title}
       {subtitle}
       {description}
       {imageUrl}
       {address}
-      {contactEmail} />
+      {contactEmail}
+      {isFavorite}
+      on:togglefavorite
+      on:showdetails />
   {/each}
 </section>
 
