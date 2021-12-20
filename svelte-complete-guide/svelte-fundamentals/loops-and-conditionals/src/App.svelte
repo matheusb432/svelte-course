@@ -44,7 +44,7 @@
 
 <div class="main-container">
   <div class="col">
-    <div id="form">
+    <form id="form">
       <div class="form-control">
         <label for="userName">User Name</label>
         <input type="text" bind:value={name} id="userName" />
@@ -61,10 +61,15 @@
         <label for="desc">Description</label>
         <textarea rows="3" bind:value={description} id="desc" />
       </div>
-    </div>
 
-    <button on:click={addContact}>Add Contact Card</button>
-    <button on:click={deleteFirst}>Delete first</button>
+      <!-- NOTE preventDefault event modifier to execute event.preventDefault() before the function runs -->
+      <button type="submit" on:click|preventDefault={addContact}
+        >Add Contact Card</button>
+    </form>
+
+    <!-- NOTE inline function -->
+    <button on:click={(ev) => (createdContacts = createdContacts.slice(1))}
+      >Delete first</button>
     <button on:click={deleteLast}>Delete last</button>
   </div>
   <div class="col">
@@ -97,6 +102,7 @@
   #form {
     width: 30rem;
     max-width: 100%;
+    margin: 1rem 0;
   }
 
   .main-container {
