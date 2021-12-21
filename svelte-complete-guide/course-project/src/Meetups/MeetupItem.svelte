@@ -42,13 +42,13 @@
     <p>{description}</p>
   </div>
   <footer>
-    <Button href="mailto:{contactEmail}" caption="Contact" />
+    <Button href="mailto:{contactEmail}">Contact</Button>
     <Button
       mode="outline"
       color={isFavorite ? null : 'success'}
-      caption={isFavorite ? 'Unfavorite' : 'Favorite'}
-      on:click={favoriteMeetup} />
-    <Button caption="Show Details" on:click={showDetails} />
+      on:click={favoriteMeetup}
+      >{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    <Button on:click={showDetails}>Show Details</Button>
   </footer>
 </article>
 

@@ -6,6 +6,12 @@
   export let id: string;
   export let label: string;
   export let rows: number | null = null;
+  export let valid = true;
+  export let validityMsg = '';
+
+  let touched = false;
+
+  $: showValidationErr = !valid && touched;
 
   function typeAction(node: HTMLInputElement) {
     node.type = type;
@@ -15,10 +21,23 @@
 <div class="form-control">
   <label for={id}>{label}</label>
   {#if controlType === 'textarea'}
-    <!-- NOTE on:input like this is forwarded to the parent component  -->
-    <textarea {rows} {id} {value} on:input />
+    <!-- NOTE bind:value will forward allow the value to be binded from the parent component  -->
+    <textarea
+      class:invalid={showValidationErr}
+      {rows}
+      {id}
+      bind:value
+      on:blur={() => (touched = true)} />
   {:else}
-    <input use:typeAction {id} bind:value />
+    <input
+      class:invalid={showValidationErr}
+      use:typeAction
+      {id}
+      bind:value
+      on:blur={() => (touched = true)} />
+  {/if}
+  {#if validityMsg && showValidationErr}
+    <p class="error-message">{validityMsg}</p>
   {/if}
 </div>
 
@@ -51,6 +70,16 @@
   .form-control {
     padding: 0.5rem 0;
     width: 100%;
+    margin: 0.25rem 0;
+  }
+
+  .invalid {
+    border-color: red;
+    background: #fde3e3;
+  }
+
+  .error-message {
+    color: red;
     margin: 0.25rem 0;
   }
 </style>
