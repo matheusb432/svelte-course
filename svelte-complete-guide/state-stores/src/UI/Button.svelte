@@ -1,28 +1,9 @@
-<script lang="ts">
-  export let type: 'button' | 'submit' = 'button';
-  export let href: string | null = null;
-  export let mode: string | null = null;
-  export let color: string | null = null;
-  export let disabled = false;
-
-  function typeAction(node: HTMLButtonElement) {
-    node.type = type;
-  }
+<script>
+  export let mode;
 </script>
 
-{#if href}
-  <a {href} on:click>
-    <slot />
-  </a>
-{:else}
-  <button class="{mode} {color}" use:typeAction on:click {disabled}>
-    <slot />
-  </button>
-{/if}
-
 <style>
-  button,
-  a {
+  button {
     font: inherit;
     border: 1px solid #cf0056;
     background: #cf0056;
@@ -39,9 +20,7 @@
   }
 
   button:hover,
-  button:active,
-  a:hover,
-  a:active {
+  button:active {
     background: #e40763;
     border-color: #e40763;
     box-shadow: 1px 1px 8px rgba(77, 51, 51, 0.26);
@@ -55,17 +34,6 @@
     color: #959595;
     box-shadow: none;
     cursor: not-allowed;
-  }
-
-  .success {
-    background: #01a129;
-    border-color: #01a129;
-  }
-
-  .success:hover,
-  .success:active {
-    background: #1ac745;
-    border-color: #1ac745;
   }
 
   .outline {
@@ -86,14 +54,8 @@
     background: transparent;
     color: #ccc;
   }
-
-  .outline.success {
-    border-color: #01a129;
-    color: #01a129;
-  }
-
-  .outline.success:hover,
-  .outline.success:active {
-    background: #c2ffd1;
-  }
 </style>
+
+<button class={mode} type="button" on:click>
+  <slot />
+</button>

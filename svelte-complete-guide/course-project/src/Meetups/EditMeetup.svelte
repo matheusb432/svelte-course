@@ -2,21 +2,30 @@
   import { TextInput, Button, Modal } from '../UI';
   import { Meetup } from './meetup.model';
   import { createEventDispatcher } from 'svelte';
-  import { isEmpty } from '../helpers/validation';
+  import { emailRegex, isEmpty, notEmpty } from '../helpers/validation';
 
-  export let editMode: string = '';
+  export let editMode = '';
 
-  let title: string = '';
-  let titleValid = false;
-  let subtitle: string = '';
-  let imageUrl: string = 'image url';
-  let contactEmail: string = 'ok@asdhav.coamfsdfsfsfsfsfsdfahjaje5do';
-  let address: string = 'Address';
-  let description: string = 'Description';
+  let title = '';
+  let subtitle = '';
+  let address = '';
+  let contactEmail = '';
+  let description = '';
+  let imageUrl = '';
 
   $: titleValid = !isEmpty(title);
-
   $: subtitleValid = !isEmpty(subtitle);
+  $: addressValid = !isEmpty(address);
+  $: imageUrlValid = !isEmpty(imageUrl);
+  $: emailValid = !isEmpty(contactEmail) && emailRegex.test(contactEmail);
+  $: descriptionValid = !isEmpty(description);
+  $: formValid =
+    titleValid &&
+    subtitleValid &&
+    addressValid &&
+    emailValid &&
+    descriptionValid &&
+    imageUrlValid;
 
   const dispatch = createEventDispatcher();
 
@@ -46,31 +55,46 @@
       bind:value={title}
       id="title"
       valid={titleValid}
-      validityMsg="Title must not be empty."
+      validityMsg={`Title ${notEmpty}`}
       label="Title" />
     <TextInput
       bind:value={subtitle}
       id="subtitle"
       label="Subtitle"
       valid={subtitleValid}
-      validityMsg="Subtitle must not be empty." />
-    <TextInput bind:value={address} id="address" label="Address" />
-    <TextInput bind:value={imageUrl} id="imageUrl" label="Image URL" />
+      validityMsg={`Subtitle ${notEmpty}`} />
+    <TextInput
+      bind:value={address}
+      id="address"
+      label="Address"
+      valid={addressValid}
+      validityMsg={`Address ${notEmpty}`} />
+    <TextInput
+      bind:value={imageUrl}
+      id="imageUrl"
+      label="Image URL"
+      valid={imageUrlValid}
+      validityMsg={`Image URL ${notEmpty}`} />
     <TextInput
       bind:value={contactEmail}
       id="contactEmail"
       label="Contact Email"
-      type="email" />
+      type="email"
+      valid={emailValid}
+      validityMsg={`Enter a valid email`} />
 
     <TextInput
       bind:value={description}
       label="Description"
       controlType="textarea"
-      id="description" />
+      id="description"
+      valid={descriptionValid}
+      validityMsg={`Description ${notEmpty}`} />
   </form>
 
   <div slot="footer">
-    <Button type="button" on:click={submitForm}>Save Meetup</Button>
+    <Button type="button" on:click={submitForm} disabled={!formValid}
+      >Save Meetup</Button>
   </div>
 </Modal>
 
