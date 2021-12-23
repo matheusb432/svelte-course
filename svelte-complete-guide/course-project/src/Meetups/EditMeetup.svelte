@@ -1,10 +1,13 @@
 <script lang="ts">
+  import meetupsStore from './meetups-store';
   import { TextInput, Button, Modal } from '../UI';
   import { Meetup } from './meetup.model';
   import { createEventDispatcher } from 'svelte';
   import { emailRegex, isEmpty, notEmpty } from '../helpers/validation';
 
   export let editMode = '';
+
+  export let id: string | null = null;
 
   let title = '';
   let subtitle = '';
@@ -27,12 +30,26 @@
     descriptionValid &&
     imageUrlValid;
 
+  if (id) {
+    meetupsStore.subscribe((items) => {
+      const selectedMeetup = items.find((i) => i.id === id);
+
+      if (selectedMeetup == null) return;
+
+      title = selectedMeetup.title;
+      subtitle = selectedMeetup.subtitle;
+      address = selectedMeetup.address;
+      contactEmail = selectedMeetup.contactEmail;
+      imageUrl = selectedMeetup.imageUrl;
+      description = selectedMeetup.description;
+    });
+  }
+
   const dispatch = createEventDispatcher();
 
   function submitForm(): void {
     const newMeetup = new Meetup(
       `${Math.random()}`,
-      //   '',
       title,
       subtitle,
       description,
@@ -41,7 +58,13 @@
       contactEmail
     );
 
-    dispatch('save', { newMeetup });
+    if (id) {
+      meetupsStore.updateMeetup(id, newMeetup);
+    } else {
+      meetupsStore.addMeetup(newMeetup);
+    }
+
+    dispatch('save');
   }
 
   const isAddMode = (): boolean => editMode === 'add';

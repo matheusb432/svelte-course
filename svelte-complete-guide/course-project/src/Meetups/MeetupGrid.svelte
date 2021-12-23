@@ -1,8 +1,14 @@
 <script lang="ts">
   import { Meetup } from './meetup.model';
+  import MeetupDetail from './MeetupDetail.svelte';
   import MeetupItem from './MeetupItem.svelte';
 
   export let meetups: Meetup[];
+  let detailsId: string;
+
+  function showDetails(event: CustomEvent) {
+    detailsId = event.detail.id;
+  }
 </script>
 
 <section id="meetups">
@@ -16,8 +22,12 @@
       {address}
       {contactEmail}
       {isFavorite}
-      on:togglefavorite
-      on:showdetails />
+      on:showdetails
+      on:edit>
+      {#if detailsId}
+        <MeetupDetail id={detailsId} />
+      {/if}
+    </MeetupItem>
   {/each}
 </section>
 

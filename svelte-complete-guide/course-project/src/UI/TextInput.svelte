@@ -16,6 +16,10 @@
   function typeAction(node: HTMLInputElement) {
     node.type = type;
   }
+
+  function markAsTouched() {
+    touched = true;
+  }
 </script>
 
 <div class="form-control">
@@ -27,14 +31,14 @@
       {rows}
       {id}
       bind:value
-      on:blur={() => (touched = true)} />
+      on:blur={markAsTouched} />
   {:else}
     <input
       class:invalid={showValidationErr}
       use:typeAction
       {id}
       bind:value
-      on:blur={() => (touched = true)} />
+      on:blur={markAsTouched} />
   {/if}
   {#if validityMsg && showValidationErr}
     <p class="error-message">{validityMsg}</p>
