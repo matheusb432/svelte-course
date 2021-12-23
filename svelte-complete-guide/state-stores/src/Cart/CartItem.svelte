@@ -9,11 +9,6 @@
 
   let showDescription = false;
   let description = '';
-  // let fetchedProducts;
-
-  // products.subscribe(prods => {
-  //   fetchedProducts = prods;
-  // })
 
   function displayDescription() {
     showDescription = !showDescription;
@@ -22,9 +17,7 @@
   }
 
   function removeFromCart() {
-    cartItems.update((items) => {
-      return items.filter((item) => item.id !== id);
-    });
+    cartItems.removeItem(id);
   }
 </script>
 
