@@ -1,9 +1,7 @@
-import { AddMap } from 'mapper-ts/lib-esm';
+import { IgnoreMap } from 'mapper-ts/lib-esm';
 
-export class Meetup {
-  @AddMap('id')
-  id?: string;
-
+@IgnoreMap('id')
+export class MeetupPostDto {
   constructor(
     public title: string,
     public subtitle: string,
@@ -11,6 +9,6 @@ export class Meetup {
     public imageUrl: string,
     public address: string,
     public contactEmail: string,
-    public isFavorite = false
+    public isFavorite: boolean
   ) {}
 }

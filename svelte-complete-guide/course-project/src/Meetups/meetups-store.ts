@@ -1,15 +1,20 @@
 import { mockMeetups } from './mock-meetups';
-import { writable } from 'svelte/store';
+import { Writable, writable } from 'svelte/store';
 import { Meetup } from '.';
 
-const meetupsStore = writable(mockMeetups);
+// const meetupsStore = writable(mockMeetups);
+const meetupsStore: Writable<Meetup[]> = writable([]);
 
 const customMeetupsStore = {
   subscribe: meetupsStore.subscribe,
-  addMeetup: (meetup: Meetup) => {
+  setMeetups: (meetups: Meetup[]) => {
+    meetupsStore.set(meetups);
+  },
+  addMeetup: (meetup: Meetup, createdId: string) => {
     meetupsStore.update((meetups) => {
-      console.log(meetups, meetup);
-      return [...meetups, { ...meetup }];
+      const newMeetup = { ...meetup, id: createdId } as Meetup;
+
+      return [...meetups, newMeetup];
     });
   },
   toggleFavorite: (id: string) => {
@@ -35,6 +40,8 @@ const customMeetupsStore = {
       if (meetupIndex == null) return meetups;
 
       const updatedMeetup = { ...meetups[meetupIndex], ...meetup };
+
+      updatedMeetup.isFavorite = updatedMeetups[meetupIndex].isFavorite;
 
       updatedMeetups[meetupIndex] = updatedMeetup;
 

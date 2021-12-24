@@ -1,8 +1,7 @@
 import { Meetup } from './meetup.model';
-
+// TODO remove
 export const mockMeetups: Meetup[] = [
   new Meetup(
-    'm1',
     'Coding bootcamp',
     'Learn to code in 2 hours',
     'Learn to build dashing hello world apps that can print messages to the console',
@@ -11,7 +10,6 @@ export const mockMeetups: Meetup[] = [
     'code@test.com'
   ),
   new Meetup(
-    'm2',
     'Swim together',
     'Learn to swim in 1/2 hour',
     'Learn to swim dashingly',

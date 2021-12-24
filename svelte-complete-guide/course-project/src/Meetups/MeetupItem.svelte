@@ -4,6 +4,8 @@
   import { scale } from 'svelte/transition';
 
   import { Button, Badge } from '../UI';
+  import { patchMeetup } from './meetups-http';
+  import LoadingSpinner from '../UI/LoadingSpinner.svelte';
 
   export let id: string;
   export let title: string;
@@ -14,9 +16,17 @@
   export let description: string;
   export let isFavorite: boolean;
 
+  let isLoading = false;
+
   const dispatch = createEventDispatcher();
 
-  function toggleFavorite(): void {
+  async function toggleFavorite(): Promise<void> {
+    isLoading = true;
+    await patchMeetup(id, { isFavorite: !isFavorite }).catch((err) => {
+      isLoading = false;
+    });
+    isLoading = false;
+
     meetupsStore.toggleFavorite(id);
   }
 
@@ -25,7 +35,7 @@
   }
 </script>
 
-<article transition:scale>
+<article transition:scale|local>
   <header>
     <h1>
       {title}
@@ -49,11 +59,15 @@
       mode="outline"
       type="button"
       on:click={() => dispatch('edit', { id })}>Edit</Button>
-    <Button
-      mode="outline"
-      color={isFavorite ? null : 'success'}
-      on:click={toggleFavorite}
-      >{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    {#if isLoading}
+      <span>Changing...</span>
+    {:else}
+      <Button
+        mode="outline"
+        color={isFavorite ? null : 'success'}
+        on:click={toggleFavorite}
+        >{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    {/if}
     <Button on:click={showDetails}>Show Details</Button>
   </footer>
 </article>
@@ -87,13 +101,6 @@
     font-size: 1.25rem;
     margin: 0.5rem 0;
     font-family: 'Roboto Slab', sans-serif;
-  }
-
-  h1.is-favorite {
-    background: #01a129;
-    color: white;
-    padding: 0 0.5rem;
-    border-radius: 5px;
   }
 
   h2 {

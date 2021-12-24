@@ -4,17 +4,23 @@
   import { Meetup } from './meetup.model';
   import { createEventDispatcher } from 'svelte';
   import { emailRegex, isEmpty, notEmpty } from '../helpers/validation';
+  import {
+    postMeetup,
+    updateMeetup,
+    deleteMeetup as httpDeleteMeetup,
+  } from './meetups-http';
 
   export let editMode = '';
 
   export let id: string | null = null;
 
-  let title = '';
-  let subtitle = '';
-  let address = '';
-  let contactEmail = '';
-  let description = '';
-  let imageUrl = '';
+  let title = 'mock title';
+  let subtitle = 'subtitle';
+  let address = 'add test';
+  let contactEmail = 'contact@meeeeeeeeeeeeeeeeeeeeee.adhfsdhdsdfdhjndfsg';
+  let description = 'tset';
+  let imageUrl =
+    'https://spaces-wp.imgix.net/2016/06/coding-in-the-classroom.png?auto=compress,format&q=50';
 
   $: titleValid = !isEmpty(title);
   $: subtitleValid = !isEmpty(subtitle);
@@ -47,9 +53,9 @@
 
   const dispatch = createEventDispatcher();
 
-  function submitForm(): void {
+  async function submitForm(): Promise<void> {
     const newMeetup = new Meetup(
-      `${Math.random()}`,
+      // `${Math.random()}`,
       title,
       subtitle,
       description,
@@ -59,9 +65,18 @@
     );
 
     if (id) {
+      // TODO update on firebase
+      await updateMeetup(id, newMeetup).catch((err) => {
+        dispatch('save');
+      });
+
       meetupsStore.updateMeetup(id, newMeetup);
     } else {
-      meetupsStore.addMeetup(newMeetup);
+      const responseData = (await postMeetup(newMeetup).catch((err) => {
+        dispatch('save');
+      })) as any;
+
+      meetupsStore.addMeetup(newMeetup, responseData.name);
     }
 
     dispatch('save');
@@ -71,8 +86,10 @@
     dispatch('cancel');
   }
 
-  function deleteMeetup(): void {
+  async function deleteMeetup(): Promise<void> {
     if (id == null) return;
+
+    await httpDeleteMeetup(id);
 
     meetupsStore.removeMeetup(id);
 

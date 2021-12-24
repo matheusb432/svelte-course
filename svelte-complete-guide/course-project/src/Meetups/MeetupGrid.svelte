@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Meetup } from './meetup.model';
-  import MeetupDetail from './MeetupDetail.svelte';
   import MeetupFilter from './MeetupFilter.svelte';
   import MeetupItem from './MeetupItem.svelte';
   import { Button } from '../UI';
@@ -8,16 +7,11 @@
   import { flip } from 'svelte/animate';
 
   export let meetups: Meetup[];
-  let detailsId: string;
   let favsOnly = false;
 
   $: filteredMeetups = meetups.filter((m) => !favsOnly || m.isFavorite);
 
   const dispatch = createEventDispatcher();
-
-  function showDetails(event: CustomEvent) {
-    detailsId = event.detail.id;
-  }
 
   function setFilter(event: CustomEvent) {
     favsOnly = event.detail === 1;
@@ -28,6 +22,9 @@
   <MeetupFilter on:select={setFilter} />
   <Button on:click={() => dispatch('add')}>New Meetup</Button>
 </section>
+{#if filteredMeetups?.length === 0}
+  <p id="no-meetups">No meetups found, you can start adding some</p>
+{/if}
 <section id="meetups">
   {#each filteredMeetups as { id, title, subtitle, description, imageUrl, address, contactEmail, isFavorite } (id)}
     <article animate:flip={{ duration: 500 }}>
@@ -41,16 +38,15 @@
         {contactEmail}
         {isFavorite}
         on:showdetails
-        on:edit>
-        {#if detailsId}
-          <MeetupDetail id={detailsId} />
-        {/if}
-      </MeetupItem>
+        on:edit />
     </article>
   {/each}
 </section>
 
 <style>
+  #no-meetups {
+    margin: 1rem;
+  }
   #meetups {
     width: 100%;
     display: grid;

@@ -1,15 +1,45 @@
 <script lang="ts">
   import { MeetupGrid, EditMeetup } from './Meetups';
 
-  import { Header } from './UI';
+  import {
+    Header,
+    LoadingSpinner,
+    Error,
+    loadingStore,
+    errorStore,
+  } from './UI';
 
   import meetupsStore from './Meetups/meetups-store';
   import MeetupDetail from './Meetups/MeetupDetail.svelte';
+  import { onMount } from 'svelte';
+  import { getMeetups } from './Meetups/meetups-http';
 
   let editMode: string = '';
   let page: 'overview' | 'details' = 'overview';
   let detailId: string;
   let editId: string;
+
+  // let error: string = '';
+
+  onMount(async () => {
+    loadingStore.setLoading(true);
+    // const meetupsResponse = await getMeetups().catch((err) => {
+    //   console.log('caught error!');
+    //   if (!err) {
+    //     // error = 'Something went wrong!';
+    //   } else {
+    //     error = typeof err === 'string' ? err : err.message;
+    //   }
+    // });
+    const meetupsResponse = await getMeetups();
+    loadingStore.setLoading(false);
+
+    if (!meetupsResponse) return;
+
+    const { keys, meetups } = meetupsResponse;
+
+    meetupsStore.setMeetups(meetups);
+  });
 
   function addMeetup(event: CustomEvent): void {
     setEditState();
@@ -37,6 +67,10 @@
     detailId = '';
   }
 
+  function cleanError(): void {
+    errorStore.setError('');
+  }
+
   function cancelEdit() {
     setEditState();
   }
@@ -46,6 +80,10 @@
     editMode = id ? 'edit' : '';
   }
 </script>
+
+{#if $errorStore}
+  <Error message={$errorStore} on:cancel={cleanError} />
+{/if}
 
 <Header />
 
@@ -59,11 +97,15 @@
         on:save={addMeetup} />
     {/if}
 
-    <MeetupGrid
-      meetups={$meetupsStore}
-      on:showdetails={showDetails}
-      on:edit={startEdit}
-      on:add={startAdd} />
+    {#if $loadingStore}
+      <LoadingSpinner />
+    {:else}
+      <MeetupGrid
+        meetups={$meetupsStore}
+        on:showdetails={showDetails}
+        on:edit={startEdit}
+        on:add={startAdd} />
+    {/if}
   {:else}
     <MeetupDetail id={detailId} on:close={closeDetails} />
   {/if}
