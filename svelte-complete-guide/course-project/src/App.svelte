@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MeetupGrid, EditMeetup } from './Meetups';
 
-  import { Header, Button } from './UI';
+  import { Header } from './UI';
 
   import meetupsStore from './Meetups/meetups-store';
   import MeetupDetail from './Meetups/MeetupDetail.svelte';
@@ -28,6 +28,10 @@
     setEditState(id);
   }
 
+  function startAdd(event: CustomEvent): void {
+    editMode = 'add';
+  }
+
   function closeDetails(): void {
     page = 'overview';
     detailId = '';
@@ -47,22 +51,19 @@
 
 <main>
   {#if page === 'overview'}
-    <div class="meetup-controls">
-      <Button on:click={() => (editMode = 'add')}>New Meetup</Button>
-    </div>
-
     {#if editMode}
       <EditMeetup
         id={editId}
         {editMode}
-        on:save={addMeetup}
-        on:cancel={cancelEdit} />
+        on:cancel={cancelEdit}
+        on:save={addMeetup} />
     {/if}
 
     <MeetupGrid
       meetups={$meetupsStore}
       on:showdetails={showDetails}
-      on:edit={startEdit} />
+      on:edit={startEdit}
+      on:add={startAdd} />
   {:else}
     <MeetupDetail id={detailId} on:close={closeDetails} />
   {/if}
@@ -71,9 +72,5 @@
 <style>
   main {
     margin-top: 5rem;
-  }
-
-  .meetup-controls {
-    margin: 1rem;
   }
 </style>

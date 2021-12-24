@@ -67,6 +67,18 @@
     dispatch('save');
   }
 
+  function cancel(): void {
+    dispatch('cancel');
+  }
+
+  function deleteMeetup(): void {
+    if (id == null) return;
+
+    meetupsStore.removeMeetup(id);
+
+    dispatch('save');
+  }
+
   const isAddMode = (): boolean => editMode === 'add';
 
   const isEditMode = (): boolean => editMode === 'edit';
@@ -116,8 +128,15 @@
   </form>
 
   <div slot="footer">
-    <Button type="button" on:click={submitForm} disabled={!formValid}
-      >Save Meetup</Button>
+    <Button type="button" mode="outline" on:click={cancel}>Cancel</Button>
+    <Button
+      type="button"
+      color="success"
+      on:click={submitForm}
+      disabled={!formValid}>Save Meetup</Button>
+    {#if id}
+      <Button type="button" on:click={deleteMeetup}>Delete</Button>
+    {/if}
   </div>
 </Modal>
 

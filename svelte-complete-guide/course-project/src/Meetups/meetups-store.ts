@@ -41,6 +41,12 @@ const customMeetupsStore = {
       return updatedMeetups;
     });
   },
+
+  removeMeetup: (id: string) => {
+    meetupsStore.update((meetups) => {
+      return meetups.filter((m) => m.id !== id);
+    });
+  },
 };
 
 export default customMeetupsStore;
