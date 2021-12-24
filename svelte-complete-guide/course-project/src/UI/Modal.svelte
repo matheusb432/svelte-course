@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import Button from './Button.svelte';
+  import { fly } from 'svelte/transition';
 
   export let title: string;
 
@@ -12,7 +13,7 @@
 </script>
 
 <div class="modal-backdrop" on:click={closeModal} />
-<div class="modal">
+<div class="modal" transition:fly={{ y: 300 }}>
   <h1>{title}</h1>
   <div class="content">
     <slot />

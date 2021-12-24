@@ -1,31 +1,33 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { Buttons } from './types/buttons.enum';
 
-  let selectedButton: 0 | 1 = 0;
+  let selectedButton: Buttons = Buttons.All;
 
   const dispatch = createEventDispatcher();
 
   function filterAll(): void {
-    filterAction(0);
+    filterAction(Buttons.All);
   }
 
   function filterFavorite(): void {
-    filterAction(1);
+    filterAction(Buttons.Favorite);
   }
 
-  function filterAction(buttonType: 0 | 1 = 0): void {
+  function filterAction(buttonType: Buttons = Buttons.All): void {
     selectedButton = buttonType;
     dispatch('select', buttonType);
   }
 </script>
 
 <div>
-  <!-- NOTE 0 = All Button & 1 = Favorite Button, maybe change this to enum? -->
-  <button type="button" class:active={selectedButton === 0} on:click={filterAll}
-    >All</button>
   <button
     type="button"
-    class:active={selectedButton === 1}
+    class:active={selectedButton === Buttons.All}
+    on:click={filterAll}>All</button>
+  <button
+    type="button"
+    class:active={selectedButton === Buttons.Favorite}
     on:click={filterFavorite}>Favorite</button>
 </div>
 

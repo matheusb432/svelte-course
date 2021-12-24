@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import meetupsStore from './meetups-store';
+  import { scale } from 'svelte/transition';
 
   import { Button, Badge } from '../UI';
 
@@ -24,7 +25,7 @@
   }
 </script>
 
-<article>
+<article transition:scale>
   <header>
     <h1>
       {title}

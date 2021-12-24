@@ -5,6 +5,7 @@
   import MeetupItem from './MeetupItem.svelte';
   import { Button } from '../UI';
   import { createEventDispatcher } from 'svelte';
+  import { flip } from 'svelte/animate';
 
   export let meetups: Meetup[];
   let detailsId: string;
@@ -25,26 +26,27 @@
 
 <section id="meetup-controls">
   <MeetupFilter on:select={setFilter} />
-  <!-- <Button on:click={() => (editMode = 'add')}>New Meetup</Button> -->
   <Button on:click={() => dispatch('add')}>New Meetup</Button>
 </section>
 <section id="meetups">
   {#each filteredMeetups as { id, title, subtitle, description, imageUrl, address, contactEmail, isFavorite } (id)}
-    <MeetupItem
-      {id}
-      {title}
-      {subtitle}
-      {description}
-      {imageUrl}
-      {address}
-      {contactEmail}
-      {isFavorite}
-      on:showdetails
-      on:edit>
-      {#if detailsId}
-        <MeetupDetail id={detailsId} />
-      {/if}
-    </MeetupItem>
+    <article animate:flip={{ duration: 500 }}>
+      <MeetupItem
+        {id}
+        {title}
+        {subtitle}
+        {description}
+        {imageUrl}
+        {address}
+        {contactEmail}
+        {isFavorite}
+        on:showdetails
+        on:edit>
+        {#if detailsId}
+          <MeetupDetail id={detailsId} />
+        {/if}
+      </MeetupItem>
+    </article>
   {/each}
 </section>
 

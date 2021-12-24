@@ -1,7 +1,8 @@
 <script>
+  import { fly } from 'svelte/transition';
 </script>
 
-<span>
+<span transition:fly|local={{ x: 50 }}>
   <slot />
 </span>
 
