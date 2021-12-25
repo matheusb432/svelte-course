@@ -1,31 +1,8 @@
 <script context="module">
-  import { meetupsUrl } from '../helpers/meetups-service';
+  import { getMeetups, meetupsUrl } from '../helpers/meetups-service';
 
   export function preload(page) {
-    // TODO refactor to service
-    return this.fetch(meetupsUrl)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Fetching meetups failed, please try again later!');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const loadedMeetups = [];
-        for (const key in data) {
-          loadedMeetups.push({
-            ...data[key],
-            id: key,
-          });
-        }
-        return { fetchedMeetups: loadedMeetups.reverse() };
-      })
-      .catch((err) => {
-        error = err;
-        isLoading = false;
-        console.log(err);
-        this.error(500, 'Could not fetch meetups!');
-      });
+    return getMeetups(this);
   }
 </script>
 

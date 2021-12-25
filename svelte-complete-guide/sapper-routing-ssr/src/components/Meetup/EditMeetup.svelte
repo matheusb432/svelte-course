@@ -9,6 +9,9 @@
     getMeetup,
     meetupsUrl,
     meetupUrl,
+    patchMeetup,
+    postMeetup,
+    removeMeetup,
   } from '../../helpers/meetups-service.js';
 
   export let id = null;
@@ -60,62 +63,17 @@
       address: address,
     };
 
-    // meetups.push(newMeetup); // DOES NOT WORK!
     if (id) {
-      // fetch(`https://svelte-course.firebaseio.com/meetups/${id}.json`, {
-      fetch(meetupUrl(id), {
-        method: 'PATCH',
-        body: JSON.stringify(meetupData),
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('An error occurred, please try again!');
-          }
-          meetups.updateMeetup(id, meetupData);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      patchMeetup(id, meetupData);
     } else {
-      // fetch("https://svelte-course.firebaseio.com/meetups.json", {
-      fetch(meetupsUrl, {
-        method: 'POST',
-        body: JSON.stringify({ ...meetupData, isFavorite: false }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('An error occurred, please try again!');
-          }
-          return res.json();
-        })
-        .then((data) => {
-          meetups.addMeetup({
-            ...meetupData,
-            isFavorite: false,
-            id: data.name,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      postMeetup(meetupData, meetups);
     }
     dispatch('save');
   }
 
   function deleteMeetup() {
-    // fetch(`https://svelte-course.firebaseio.com/meetups/${id}.json`, {
-    fetch(meetupUrl(id), {
-      method: 'DELETE',
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('An error occurred, please try again!');
-        }
-        meetups.removeMeetup(id);
-      })
-      .catch((err) => console.log(err));
+    removeMeetup(id);
+
     dispatch('save');
   }
 

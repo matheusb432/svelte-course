@@ -4,7 +4,7 @@
   import Button from '../UI/Button.svelte';
   import Badge from '../UI/Badge.svelte';
   import LoadingSpinner from '../UI/LoadingSpinner.svelte';
-  import { meetupUrl } from '../../helpers/meetups-service.js';
+  import { meetupUrl, patchMeetup } from '../../helpers/meetups-service.js';
 
   export let id;
   export let title;
@@ -21,23 +21,10 @@
 
   function toggleFavorite() {
     isLoading = true;
-    // fetch(`https://svelte-course.firebaseio.com/meetups/${id}.json`, {
-    fetch(meetupUrl(id), {
-      method: 'PATCH',
-      body: JSON.stringify({ isFavorite: !isFav }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('An error occurred, please try again!');
-        }
-        isLoading = false;
-        meetups.toggleFavorite(id);
-      })
-      .catch((err) => {
-        isLoading = false;
-        console.log(err);
-      });
+
+    patchMeetup(id, { isFavorite: !isFav }).finally((result) => {
+      isLoading = false;
+    });
   }
 </script>
 
