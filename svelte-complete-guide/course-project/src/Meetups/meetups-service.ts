@@ -1,5 +1,4 @@
 import { MeetupPostDto } from './types/meetup-post-dto';
-import { MeetupsValues } from './types/meetups-values';
 import { FirebaseData } from './types/firebase-data';
 import { Meetup } from './meetup.model';
 import { Methods } from './types/methods.enum';
@@ -17,7 +16,7 @@ const meetupsUrl = `${firebaseUrl}/meetups.json`;
 const meetupUrl = (id: string) => `${firebaseUrl}/meetups/${id}.json`;
 
 // NOTE this will map all Firebase data to a reversed array of objects of type Meetup
-async function getMeetups(): Promise<MeetupsValues | void> {
+async function getMeetups(): Promise<Meetup[] | void> {
   return fetch(meetupsUrl)
     .then(mapRequest)
     .then((meetupsData: FirebaseData<Meetup>) => {
@@ -28,12 +27,7 @@ async function getMeetups(): Promise<MeetupsValues | void> {
         new Mapper(Meetup).map({ ...md, id: keys[index] })
       ) as Meetup[];
 
-      meetups.reverse();
-
-      return {
-        keys,
-        meetups,
-      };
+      return meetups.reverse();
     })
     .catch(handleError);
 }

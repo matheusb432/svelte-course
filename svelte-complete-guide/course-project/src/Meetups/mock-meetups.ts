@@ -1,5 +1,6 @@
 import { Meetup } from './meetup.model';
-// TODO remove
+
+// NOTE use this to mock the app without a backend, if necessary
 export const mockMeetups: Meetup[] = [
   new Meetup(
     'Coding bootcamp',

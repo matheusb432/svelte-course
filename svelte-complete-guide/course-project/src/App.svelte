@@ -12,31 +12,23 @@
   import meetupsStore from './Meetups/meetups-store';
   import MeetupDetail from './Meetups/MeetupDetail.svelte';
   import { onMount } from 'svelte';
-  import { getMeetups } from './Meetups/meetups-http';
+  import { getMeetups } from './Meetups/meetups-service';
 
   let editMode: string = '';
   let page: 'overview' | 'details' = 'overview';
   let detailId: string;
   let editId: string;
 
-  // let error: string = '';
-
   onMount(async () => {
     loadingStore.setLoading(true);
-    // const meetupsResponse = await getMeetups().catch((err) => {
-    //   console.log('caught error!');
-    //   if (!err) {
-    //     // error = 'Something went wrong!';
-    //   } else {
-    //     error = typeof err === 'string' ? err : err.message;
-    //   }
-    // });
     const meetupsResponse = await getMeetups();
     loadingStore.setLoading(false);
 
     if (!meetupsResponse) return;
 
-    const { keys, meetups } = meetupsResponse;
+    const meetups = meetupsResponse;
+
+    console.log(meetups);
 
     meetupsStore.setMeetups(meetups);
   });

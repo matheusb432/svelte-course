@@ -4,7 +4,7 @@
   import { scale } from 'svelte/transition';
 
   import { Button, Badge } from '../UI';
-  import { patchMeetup } from './meetups-http';
+  import { patchMeetup } from './meetups-service';
   import LoadingSpinner from '../UI/LoadingSpinner.svelte';
 
   export let id: string;

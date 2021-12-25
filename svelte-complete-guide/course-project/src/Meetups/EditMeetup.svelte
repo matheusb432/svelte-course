@@ -8,7 +8,7 @@
     postMeetup,
     updateMeetup,
     deleteMeetup as httpDeleteMeetup,
-  } from './meetups-http';
+  } from './meetups-service';
 
   export let editMode = '';
 
@@ -55,7 +55,6 @@
 
   async function submitForm(): Promise<void> {
     const newMeetup = new Meetup(
-      // `${Math.random()}`,
       title,
       subtitle,
       description,
@@ -65,7 +64,6 @@
     );
 
     if (id) {
-      // TODO update on firebase
       await updateMeetup(id, newMeetup).catch((err) => {
         dispatch('save');
       });

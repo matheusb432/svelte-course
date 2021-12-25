@@ -1,8 +1,6 @@
-import { mockMeetups } from './mock-meetups';
 import { Writable, writable } from 'svelte/store';
 import { Meetup } from '.';
 
-// const meetupsStore = writable(mockMeetups);
 const meetupsStore: Writable<Meetup[]> = writable([]);
 
 const customMeetupsStore = {
