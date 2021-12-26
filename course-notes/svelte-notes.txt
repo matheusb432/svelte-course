@@ -1,0 +1,151 @@
+--	Setup (https://svelte.dev/blog/svelte-and-typescript)
+
+	--	Create a Svelte app
+		>>	npx degit sveltejs/template {project name}
+
+	--	Enable TypeScript to new project (in the project's root folder)
+		>>	node scripts/setupTypeScript.js
+
+	--	Add TypeScript to existing project
+		>>	npm i -D @tsconfig/svelte typescript svelte-preprocess svelte-check
+
+--	General
+
+	--	Svelte is a compiler, not a framework - it translates instructions into efficient runtime code at build time
+
+	--	Because Svelte is no framework - there is no extra code to be shipped, instead it compiles your code at build-time, which eliminates the performance overhead that other frameworks have, thus making it the ideal framework for performance critical web applications.
+
+
+--	Core Syntax
+
+	>>	$:
+		--	Creates a reactive expression that updates it's values whenever it's dependent values change
+
+	>>	class:
+		--	CSS Class directive that dynamically adds or removes classes based on a boolean expression
+
+	>>	export let {variable name}
+		--	Exposes a variable that can then be binded to from a parent component  
+
+	>>	{#if} ... <html /> ... {/if}
+		--	Conditionally renders template code
+
+	>>	{#each [array] as [item],[index] (uniqueIdentifier)}
+		--	Loops through a list to render multiple items, optionally adding an index and a identifier for each item
+
+	>>	createEventDispatcher() => dispatch --> dispatch('action-type', {detail: 'data'})
+		--	Dispatch can be used to emit events from child components to parent components
+
+	>>	<slot name="string-value"/>
+		--	Specifies a place where child content of a declared component will render, similar to Angular's ng-content or React's props.children 
+
+		--	It's also possible to name slots to have multiple places in a component where content gets passed
+
+		--	Any child content passed to the slot tag will be the default in case it's content is not provided 
+
+	>>	${store}
+		--	Accesses a store's value without needing to manage a subscription
+
+--	Stores
+
+	--	Stores allow for the outsourcing of logic and data management of components into separate files
+
+	--	Useful when there is a need for data on different parts of the application, where using events and databinding isn't pratical to share data between components
+
+	--	e.g.
+
+		--	Creating a store:
+			>>	const cart = writable([
+				  {
+				    id: 'p3',
+				    title: 'Test',
+				    price: 9.99,
+				  },
+				  {
+				    id: 'p4',
+				    title: 'Test',
+				    price: 9.99,
+				  },
+				]);
+
+		--	Updating the store:
+			>>	    cartItems.update((items) => {
+				      return [...items, { id: Math.random(), title, price }];
+				    });
+
+--	Rendering
+	
+	--	Without a unique ID in #each loops, any elements after a removed item get rendered again, so adding a unique identifier can improve performance
+
+		--	This happens because Svelte always deletes the last element from the list, so if the first item is deleted, all items get deleted and then all but the first item get rendered again.
+
+--	Modularity
+
+	--	It's possible to add Svelte components to any html file by simply instantiating a component and attach it to a html element in the `target` property
+
+		--	However, said components will work as standalone root-level components, so communication between them won't be possible by conventional means.
+
+	--	Because of Svelte's modularity, it can be possible to build widget-like, standalone components that can be placed in a React, Angular (or any other framework) app and use the UI component there
+
+--	Component Concepts
+
+		--	Component Lifecycle
+
+			--	Creation
+
+				==	Basic initialization work
+					--	<script> executes
+
+					--	onMount() --> More complex init work (e.g. data fetching)
+
+					--	Mounting is the process of outputting the virtual representation of a component into the final UI representation (e.g. DOM or Native Components).
+
+				==	onDestroy()
+					--	Cleanup work after a component has been destroyed, such as unsubscribing to store subscriptions to avoid memory leaks
+
+			--	Updates
+
+				==	beforeUpdate()
+					--	Save (DOM) state before Svelte updates it
+
+				==	afterUpdate()
+					--	Manually update DOM/view after Svelte update
+
+				==	tick()
+					--	Await Svelte's DOM update and executes after it
+
+		--	Component Types
+
+			--	Not an official differentiation, but just a concept that exists to help make an app more maintainable, so not every component can do everything
+
+			==	Stateful components
+				--	Hold & manage data, pass data around
+
+				--	Usually only a few in a project
+
+				--	e.g.
+					--	Root App component, Feature components
+
+			==	Presentational (stateless) components
+				--	Present static data, can serve as layout 
+
+				--	Receive & output data
+
+				--	Compose the majority of components of a project
+
+				--	e.g.
+					--	Modals, Cards, Buttons, ...
+
+--	Animations
+
+	--	With the transition directive, it's possible to apply an animation to a dynamic DOM element
+		>>	<div class="box" transition:scale>{box}</div>
+
+	>>	tweened
+
+		--	Extends the writable store function, enables basic animations when it's value changes
+
+	>>	spring
+
+		--	Extends the writable store function, enables animations that takes physics into account to build highly unique and advanced animations.
+		
