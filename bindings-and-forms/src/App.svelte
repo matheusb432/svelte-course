@@ -78,7 +78,7 @@
 
   <h2>Radio Input</h2>
   <label>
-    <!-- NOTE on radio input, bind:group must be used to bind the same prop to a group of inputs -->
+    <!-- NOTE on radio inputs, bind:group must be used to bind the same prop to a group of inputs -->
     <input type="radio" name="color" value="red" bind:group={favColor} />
     Red
   </label>
@@ -93,7 +93,7 @@
 
   <h2>Group of Inputs</h2>
   <label>
-    <!-- NOTE on a group of inputs, bind:group will give favColor the value of an array containing all values-->
+    <!-- NOTE on checkbox inputs, bind:group will set `favColorArr` to an array containing all values-->
     <input type="checkbox" name="color" value="red" bind:group={favColorArr} />
     Red
   </label>
@@ -102,7 +102,8 @@
       type="checkbox"
       name="color"
       value="green"
-      bind:group={favColorArr} />
+      bind:group={favColorArr}
+    />
     Green
   </label>
   <label>
@@ -119,7 +120,7 @@
 
   <h2>Input Local Reference</h2>
 
-  <!-- NOTE getting a reference to this element with bind:this, simular to Angular's local references -->
+  <!-- NOTE getting a reference to this element with bind:this, similar to Angular's local references -->
   <input type="text" id="username" bind:this={usernameInput} />
   <button on:click={saveData}>Save Data</button>
 
@@ -131,7 +132,8 @@
     <input
       type="email"
       bind:value={enteredEmail}
-      class:invalid={isValidEmail(enteredEmail) ? '' : 'invalid'} />
+      class:invalid={isValidEmail(enteredEmail) ? '' : 'invalid'}
+    />
     <button type="submit" disabled={!formIsValid}>Save</button>
   </form>
 </main>

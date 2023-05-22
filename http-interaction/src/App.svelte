@@ -102,7 +102,7 @@
 
 <!-- NOTE Svelte's await block, will render #await while it waits for the Promise to resolve -->
 <!-- NOTE when it resolves, will render :then, and if it throws an error, renders :catch  -->
-<!-- NOTE also important to note that this only executes when the page renders, so it's useful for static server coming from the server, not dynamic data like a CRUD list -->
+<!-- NOTE also important to note that this only executes when the page renders, so it's useful for static data coming from the server, not dynamic data like a CRUD list -->
 <!-- {#await getHobbiesAlt}
   <p>Loading</p>
 {:then hobbyData}

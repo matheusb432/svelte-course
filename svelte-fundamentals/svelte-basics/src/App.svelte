@@ -9,7 +9,7 @@
 
   let age = 21;
 
-  // NOTE `$:` syntax updates uppercaseName whenever the value of `name` changes
+  // NOTE `$:` syntax updates uppercaseName whenever the value of `userName` changes
   $: uppercaseName = userName.toUpperCase();
 
   $: console.log(userName);
